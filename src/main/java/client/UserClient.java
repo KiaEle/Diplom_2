@@ -13,12 +13,12 @@ import static io.restassured.RestAssured.given;
 
 public class UserClient {
 
-    private final String CREATE_USER_URI = "api/auth/register/";
-    private final String DELETE_USER_URI = "api/auth/user/";
-    private final String AUTHORIZATION_USER_URI = "api/auth/login/";
-    private final String UPDATE_USER_URI = "api/auth/user/";
-    private final String CREATE_ORDER_URI = "api/orders/";
-    private final String GET_ORDER_USER_URI = "api/orders/";
+    private static final String CREATE_USER_URI = "api/auth/register/";
+    private static final String DELETE_USER_URI = "api/auth/user/";
+    private static final String AUTHORIZATION_USER_URI = "api/auth/login/";
+    private static final String UPDATE_USER_URI = "api/auth/user/";
+    private static final String CREATE_ORDER_URI = "api/orders/";
+    private static final String GET_ORDER_USER_URI = "api/orders/";
 
     @Step("Создание пользователя")
     public ValidatableResponse createUser(User user) {
