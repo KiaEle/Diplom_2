@@ -12,18 +12,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.*;
 
 public class CreateOrderTest extends BaseTest {
 
+    //private UserClient userClient = new UserClient();
     @Test
     @DisplayName("Создание заказа с авторизацией и с ингредиентами")
     public void changingOrderAuthorizationAndIngredientsPositiveTest() {
+        ValidatableResponse ingredientsResponse = userClient.getIngredients();
+        List<String> ingredientsList = ingredientsResponse.extract().jsonPath().getList("data._id");
+
+        Assert.assertFalse("Список ингредиентов пуст", ingredientsList.isEmpty());
+
         Map<String, List<String>> ingredients = new HashMap<>();
-        List<String> name = new ArrayList<>();
-        name.add("61c0c5a71d1f82001bdaaa6d");
-        name.add("61c0c5a71d1f82001bdaaa6f");
-        ingredients.put("ingredients", name);
+        ingredients.put("ingredients", ingredientsList.subList(0, 2));
 
         User user = UserGenerator.getRandom();
 
@@ -68,9 +72,15 @@ public class CreateOrderTest extends BaseTest {
     @Test
     @DisplayName("Создание заказа без авторизации с ингредиентами")
     public void changingOrderNotAuthorizationAndIngredientsPositiveTest() {
-        List<String> name = new ArrayList<>();
-        name.add("61c0c5a71d1f82001bdaaa6d");
-        name.add("61c0c5a71d1f82001bdaaa6f");
+
+        ValidatableResponse ingredientsResponse = userClient.getIngredients();
+        List<String> ingredientsList = ingredientsResponse.extract().jsonPath().getList("data._id");
+
+
+        Assert.assertFalse("Список ингредиентов пуст", ingredientsList.isEmpty());
+
+
+        List<String> name = ingredientsList.subList(0, 2);
 
         User user = UserGenerator.getRandom();
         Order order = new Order(name);
@@ -110,8 +120,8 @@ public class CreateOrderTest extends BaseTest {
     @DisplayName("Создание заказа без авторизации с неверным хешем ингредиентов")
     public void changingOrderNotAuthorizationAndWithTheWrongIngredientHashNegativeTest() {
         List<String> name = new ArrayList<>();
-        name.add(faker.number().digits(4));
-        name.add(faker.number().digits(4));
+        name.add("invalidIngredient1"); // Неверный ингредиент
+        name.add("invalidIngredient2"); // Неверный ингредиент
 
         User user = UserGenerator.getRandom();
         Order order = new Order(name);
@@ -131,8 +141,8 @@ public class CreateOrderTest extends BaseTest {
     @DisplayName("Создание заказа с авторизацией и неверным хешем ингредиентов")
     public void changingOrderAuthorizationAndWithTheWrongIngredientHashNegativeTest() {
         List<String> name = new ArrayList<>();
-        name.add(faker.number().digits(4));
-        name.add(faker.number().digits(4));
+        name.add("invalidIngredient1"); // Неверный ингредиент
+        name.add("invalidIngredient2"); // Неверный ингредиент
 
         User user = UserGenerator.getRandom();
         Order order = new Order(name);

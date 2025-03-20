@@ -1,4 +1,5 @@
 import base.BaseTest;
+import client.UserClient;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import model.User;
@@ -6,9 +7,11 @@ import client.UserGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.*;
 
 public class LoginUserTest extends BaseTest {
+
 
     @Test
     @DisplayName("Авторизация под существующим пользователем")

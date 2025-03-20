@@ -1,30 +1,19 @@
-import client.UserClient;
-import com.github.javafaker.Faker;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
+import base.SetUpParamsTest;
 import model.User;
 import client.UserCredentional;
 import client.UserGenerator;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
+import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.*;
 
-public class UpdateUserTest {
-    private UserClient userClient;
-    private String accessToken;
-    private String accessToken2;
-    private Faker faker;
-
-    @Before
-    public void setUp() {
-        RestAssured.baseURI= "https://stellarburgers.nomoreparties.site/";
-        userClient = new UserClient();
-        faker = new Faker();
-    }
+public class UpdateUserTest extends SetUpParamsTest {
+    private String accessToken; // Токен первого пользователя
+    private String accessToken2; // Токен второго пользователя
 
     @Test
     @DisplayName("Изменение данных пользователя с авторизацией (изменён е-мейл)")

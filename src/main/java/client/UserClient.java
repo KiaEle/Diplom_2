@@ -6,12 +6,13 @@ import model.Order;
 import model.User;
 
 import javax.print.attribute.standard.OrientationRequested;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
-public class UserClient {
+public class UserClient  {
 
     private static final String CREATE_USER_URI = "api/auth/register/";
     private static final String DELETE_USER_URI = "api/auth/user/";
@@ -19,6 +20,16 @@ public class UserClient {
     private static final String UPDATE_USER_URI = "api/auth/user/";
     private static final String CREATE_ORDER_URI = "api/orders/";
     private static final String GET_ORDER_USER_URI = "api/orders/";
+
+
+    @Step("Получение списка ингредиентов")
+    public ValidatableResponse getIngredients() {
+        return given()
+                .header("Content-type", "application/json")
+                .when()
+                .get("/api/ingredients")
+                .then();
+    }
 
     @Step("Создание пользователя")
     public ValidatableResponse createUser(User user) {

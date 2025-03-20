@@ -1,8 +1,10 @@
 import base.BaseTest;
+import client.UserClient;
 import client.UserGenerator;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 
+import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import model.Order;
 import model.User;
@@ -15,12 +17,19 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 public class ReceivingOrdersFromSpecificUserTest extends BaseTest {
 
+
+
     @Test
     @DisplayName("Получение заказов конкретного пользователя авторизованный пользователь")
     public void changingOrderAuthorizationAndIngredientsPositiveTest() {
-        List<String> name = new ArrayList<>();
-        name.add("61c0c5a71d1f82001bdaaa6d");
-        name.add("61c0c5a71d1f82001bdaaa6f");
+
+        ValidatableResponse ingredientsResponse = userClient.getIngredients();
+        List<String> ingredientsList = ingredientsResponse.extract().jsonPath().getList("data._id");
+
+        Assert.assertFalse("Список ингредиентов пуст", ingredientsList.isEmpty());
+
+
+        List<String> name = ingredientsList.subList(0, 2);
 
         User user = UserGenerator.getRandom();
         Order order = new Order(name);
@@ -45,9 +54,13 @@ public class ReceivingOrdersFromSpecificUserTest extends BaseTest {
     @Test
     @DisplayName("Получение заказов конкретного пользователя неавторизованный пользователь")
     public void changingOrderNotAuthorizationAndIngredientsPositiveTest() {
-        List<String> name = new ArrayList<>();
-        name.add("61c0c5a71d1f82001bdaaa6d");
-        name.add("61c0c5a71d1f82001bdaaa6f");
+
+        ValidatableResponse ingredientsResponse = userClient.getIngredients();
+        List<String> ingredientsList = ingredientsResponse.extract().jsonPath().getList("data._id");
+
+        Assert.assertFalse("Список ингредиентов пуст", ingredientsList.isEmpty());
+
+        List<String> name = ingredientsList.subList(0, 2);
 
         User user = UserGenerator.getRandom();
         Order order = new Order(name);

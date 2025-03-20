@@ -1,7 +1,9 @@
 import base.BaseTest;
+import client.UserClient;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 
+import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.*;
 
 import model.User;
